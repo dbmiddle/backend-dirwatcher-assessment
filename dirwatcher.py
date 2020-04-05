@@ -41,6 +41,7 @@ def signal_handler(sig_num, frame):
 
 
 def watch_directory(args):
+    '''Watches directory for magic word, file additions and file deletions'''
     logger.info('''Watching directory: {}, File Extension: {},
     Polling Interval: {}, Magic Text: {}'''
                 .format(args.path, args.ext, args.interval, args.magic
@@ -58,6 +59,7 @@ def watch_directory(args):
 
 
 def find_magic(args):
+    '''Sets up file paths to search for magic word'''
     try:
         watched_dir_path = os.path.join(current_dir, args.path)
         file_list = os.listdir(watched_dir_path)
@@ -80,6 +82,7 @@ def find_magic(args):
 
 
 def search_file(args, full_file_path):
+    '''Searches through files to find magic word'''
     with open(full_file_path, 'r') as f:
         lines = f.readlines()
         for line_number, line in enumerate(lines):
@@ -94,6 +97,7 @@ def search_file(args, full_file_path):
 
 
 def detect_added_files(args, line_number):
+    '''Adds file to dictionary if not already present'''
     watched_dir_path = os.path.join(current_dir, args.path)
     file_list = os.listdir(watched_dir_path)
     full_file_path_list = [os.path.join(current_dir, args.path, f)
@@ -104,6 +108,8 @@ def detect_added_files(args, line_number):
 
 
 def detect_removed_files(args, full_file_path_list):
+    '''Removes files from dictionary that have been \
+        removed from watched directory'''
     for target_file in file_logger:
         if target_file not in full_file_path_list:
             del track_files[target_file]
@@ -114,6 +120,7 @@ def detect_removed_files(args, full_file_path_list):
 
 
 def create_parser():
+    '''Creates command line arguments'''
     parser = argparse.ArgumentParser()
     parser.add_argument('-e', '--ext', type=str, default='.txt',
                         help='Text file extension to watch')
