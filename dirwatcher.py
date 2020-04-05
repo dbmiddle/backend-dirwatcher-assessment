@@ -88,7 +88,8 @@ def search_file(args, full_file_path):
         for line_number, line in enumerate(lines):
             detect_added_files(args, line_number)
             if args.magic in line:
-                if line_number >= track_files[full_file_path] and full_file_path in track_files.keys():
+                if (line_number >= track_files[full_file_path]
+                        and full_file_path in track_files.keys()):
                     logger.info('*** Magic text {} found in {} on Line {} ***'
                                 .format(args.magic, full_file_path,
                                         line_number + 1
